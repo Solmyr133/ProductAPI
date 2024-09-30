@@ -42,5 +42,48 @@ namespace ProductAPI.Controllers
 
             return new { products };
         }
+
+        [HttpPost]
+        public object Post(string id, string name, int price, string createdTime)
+        {
+            conn.Connection.Open();
+
+            try
+            {
+                string sql = @"INSERT INTO products (Id, Name, Price, CreatedTime) VALUES (@Id, @Name, @Price, @CreatedTime);";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@Name", name);
+                    cmd.Parameters.AddWithValue("@Price", price);
+                    cmd.Parameters.AddWithValue("@CreatedTime", createdTime);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                return Ok(new { message = "Product inserted successfully." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, new { message = "An error occurred while inserting the product." });
+            }
+            finally
+            {
+                conn.Connection.Close();
+            }
+        }
+
+        [HttpPut]
+        public void Put()
+        {
+
+        }
+
+        [HttpDelete]
+        public void Delete()
+        {
+
+        }
     }
 }

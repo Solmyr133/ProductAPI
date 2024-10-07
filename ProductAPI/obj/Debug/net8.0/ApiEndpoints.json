@@ -2,7 +2,7 @@
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
     "Method": "Get",
-    "RelativePath": "product",
+    "RelativePath": "api/Product",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -12,7 +12,7 @@
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
     "Method": "Post",
-    "RelativePath": "product",
+    "RelativePath": "api/Product",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -38,14 +38,40 @@
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
     "Method": "Delete",
-    "RelativePath": "product",
+    "RelativePath": "api/Product",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "product",
-        "Type": "ProductAPI.DTOs.DTO\u002BDeleteProductDTO",
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ProductAPI.Model.Product",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ProductAPI.Controllers.ProductController",
+    "Method": "GetById",
+    "RelativePath": "api/Product/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -64,7 +90,7 @@
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
     "Method": "Put",
-    "RelativePath": "product/id",
+    "RelativePath": "api/Product/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -72,7 +98,7 @@
       {
         "Name": "id",
         "Type": "System.Guid",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "product",

@@ -9,7 +9,7 @@ using static ProductAPI.DTOs.DTO;
 
 namespace ProductAPI.Controllers
 {
-    [Route("product")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -44,6 +44,31 @@ namespace ProductAPI.Controllers
             conn.Connection.Close();
 
             return new { products };
+        }
+
+
+        [HttpGet("{id}")]
+        public ActionResult<Product> GetById(Guid id)
+        {
+            conn.Connection.Open();
+
+            string sql = $"SELECT * FROM products WHERE `Id` = '{id}';";
+            MySqlCommand cmd = new MySqlCommand(sql, conn.Connection);
+
+            MySqlDataReader dr = cmd.ExecuteReader();
+
+            dr.Read();
+
+            Product currentProduct = new Product();
+
+            currentProduct.Id = dr.GetGuid(0);
+            currentProduct.Name = dr.GetString(1);
+            currentProduct.Price = dr.GetInt32(2);
+            currentProduct.CreatedTime = dr.GetDateTime(3);
+
+            conn.Connection.Close();
+
+            return new Product { Id = currentProduct.Id, Name = currentProduct.Name, CreatedTime = currentProduct.CreatedTime, Price = currentProduct.Price };
         }
 
         [HttpPost]
@@ -84,7 +109,7 @@ namespace ProductAPI.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public ActionResult<Product> Put(Guid id, UpdateProductDTO product)
         {
             conn.Connection.Open();
@@ -114,7 +139,7 @@ namespace ProductAPI.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<Product> Delete(DeleteProductDTO product)
+        public ActionResult<Product> Delete(Guid id)
         {
             conn.Connection.Open();
 
@@ -123,7 +148,7 @@ namespace ProductAPI.Controllers
                 string sql = @"DELETE FROM products WHERE Id = @Id;";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id", product.Id);
+                    cmd.Parameters.AddWithValue("@Id", id);
 
                     cmd.ExecuteNonQuery();
                 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 using ProductAPI.Model;
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -83,33 +84,24 @@ namespace ProductAPI.Controllers
             }
         }
 
-        [HttpPut]
-        public ActionResult<Product> Put(UpdateDTO product)
+        [HttpPut("id")]
+        public ActionResult<Product> Put(Guid id, UpdateProductDTO product)
         {
-            Product result = new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price,
-                CreatedTime = DateTime.Now,
-            };
-
             conn.Connection.Open();
 
             try
             {
-                string sql = @"UPDATE products SET Name = @Name, Price = @Price, CreatedTime = @CreatedTime WHERE Id = @Id;";
+                string sql = @"UPDATE `products` SET `Name` = @Name, `Price` = @Price WHERE `Id` = @Id;";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id", result.Id);
-                    cmd.Parameters.AddWithValue("@Name", result.Name);
-                    cmd.Parameters.AddWithValue("@Price", result.Price);
-                    cmd.Parameters.AddWithValue("@CreatedTime", result.CreatedTime.ToString("yyyy-MM-dd hh:mm:ss"));
+                    cmd.Parameters.AddWithValue("@Name", product.Name);
+                    cmd.Parameters.AddWithValue("@Price", product.Price);
+                    cmd.Parameters.AddWithValue("@Id", id);
 
                     cmd.ExecuteNonQuery();
                 }
 
-                return StatusCode(201, new { message = "Product updated successfully." });
+                return StatusCode(201, new { Id = id, Name = product.Name, Price = product.Price });
             }
             catch (Exception ex)
             {
@@ -122,7 +114,7 @@ namespace ProductAPI.Controllers
         }
 
         [HttpDelete]
-        public object Delete(Guid id)
+        public ActionResult<Product> Delete(DeleteProductDTO product)
         {
             conn.Connection.Open();
 
@@ -131,7 +123,7 @@ namespace ProductAPI.Controllers
                 string sql = @"DELETE FROM products WHERE Id = @Id;";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@Id", product.Id);
 
                     cmd.ExecuteNonQuery();
                 }

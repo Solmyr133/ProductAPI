@@ -37,15 +37,15 @@
   },
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
-    "Method": "Put",
+    "Method": "Delete",
     "RelativePath": "product",
-    "HttpMethod": "PUT",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "product",
-        "Type": "ProductAPI.DTOs.DTO\u002BUpdateDTO",
+        "Type": "ProductAPI.DTOs.DTO\u002BDeleteProductDTO",
         "IsRequired": true
       }
     ],
@@ -63,9 +63,9 @@
   },
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
-    "Method": "Delete",
-    "RelativePath": "product",
-    "HttpMethod": "DELETE",
+    "Method": "Put",
+    "RelativePath": "product/id",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -73,8 +73,23 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": false
+      },
+      {
+        "Name": "product",
+        "Type": "ProductAPI.DTOs.DTO\u002BUpdateProductDTO",
+        "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "ProductAPI.Model.Product",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

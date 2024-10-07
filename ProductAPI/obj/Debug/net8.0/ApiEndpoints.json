@@ -18,24 +18,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "price",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "createdTime",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "product",
+        "Type": "ProductAPI.Model.Product",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -47,14 +32,14 @@
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
+        "Name": "product",
+        "Type": "ProductAPI.Model.Product",
+        "IsRequired": true
       }
-    ]
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
@@ -63,13 +48,13 @@
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
       }
-    ]
+    ],
+    "ReturnTypes": []
   }
 ]

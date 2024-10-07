@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ProductAPI.Model;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace ProductAPI.Controllers
 {
@@ -44,7 +45,7 @@ namespace ProductAPI.Controllers
         }
 
         [HttpPost]
-        public object Post(string id, string name, int price, string createdTime)
+        public object Post(Product product)
         {
             conn.Connection.Open();
 
@@ -53,10 +54,10 @@ namespace ProductAPI.Controllers
                 string sql = @"INSERT INTO products (Id, Name, Price, CreatedTime) VALUES (@Id, @Name, @Price, @CreatedTime);";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    cmd.Parameters.AddWithValue("@Name", name);
-                    cmd.Parameters.AddWithValue("@Price", price);
-                    cmd.Parameters.AddWithValue("@CreatedTime", createdTime);
+                    cmd.Parameters.AddWithValue("@Id", product.Id);
+                    cmd.Parameters.AddWithValue("@Name", product.Name);
+                    cmd.Parameters.AddWithValue("@Price", product.Price);
+                    cmd.Parameters.AddWithValue("@CreatedTime", product.CreatedTime);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -65,8 +66,7 @@ namespace ProductAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, new { message = "An error occurred while inserting the product." });
+                return StatusCode(500, new { message = $"An error occurred while inserting the product. {ex.Message}" });
             }
             finally
             {
@@ -75,15 +75,60 @@ namespace ProductAPI.Controllers
         }
 
         [HttpPut]
-        public void Put()
+        public object Put(Product product)
         {
+            conn.Connection.Open();
 
+            try
+            {
+                string sql = @"UPDATE products SET Name = @Name, Price = @Price, CreatedTime = @CreatedTime WHERE Id = @Id;";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
+                {
+                    cmd.Parameters.AddWithValue("@Id", product.Id);
+                    cmd.Parameters.AddWithValue("@Name", product.Name);
+                    cmd.Parameters.AddWithValue("@Price", product.Price);
+                    cmd.Parameters.AddWithValue("@CreatedTime", product.CreatedTime);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                return Ok(new { message = "Product updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred while updating the product. {ex.Message}" });
+            }
+            finally
+            {
+                conn.Connection.Close();
+            }
         }
 
         [HttpDelete]
-        public void Delete()
+        public object Delete(Guid id)
         {
+            conn.Connection.Open();
 
+            try
+            {
+                string sql = @"DELETE FROM products WHERE Id = @Id;";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                return Ok(new { message = "Product deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred while deleting the product. {ex.Message}" });
+            }
+            finally
+            {
+                conn.Connection.Close();
+            }
         }
     }
 }

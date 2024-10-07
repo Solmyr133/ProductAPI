@@ -62,7 +62,7 @@ namespace ProductAPI.Controllers
                     cmd.ExecuteNonQuery();
                 }
 
-                return Ok(new { message = "Product inserted successfully." });
+                return StatusCode(201, new { message = "Product inserted successfully." });
             }
             catch (Exception ex)
             {
@@ -92,7 +92,7 @@ namespace ProductAPI.Controllers
                     cmd.ExecuteNonQuery();
                 }
 
-                return Ok(new { message = "Product updated successfully." });
+                return StatusCode(201, new { message = "Product updated successfully." });
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ namespace ProductAPI.Controllers
                     cmd.ExecuteNonQuery();
                 }
 
-                return Ok(new { message = "Product deleted successfully." });
+                return StatusCode(202, new { message = "Product deleted successfully." });
             }
             catch (Exception ex)
             {

@@ -19,11 +19,21 @@
     "Parameters": [
       {
         "Name": "product",
-        "Type": "ProductAPI.Model.Product",
+        "Type": "ProductAPI.DTOs.DTO\u002BCreateProductDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "ProductAPI.Model.Product",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",
@@ -35,11 +45,21 @@
     "Parameters": [
       {
         "Name": "product",
-        "Type": "ProductAPI.Model.Product",
+        "Type": "ProductAPI.DTOs.DTO\u002BUpdateDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "ProductAPI.Model.Product",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "ProductAPI.Controllers.ProductController",

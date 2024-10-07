@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using ProductAPI.Model;
 using System.Diagnostics;
 using System.Xml.Linq;
+using static ProductAPI.DTOs.DTO;
 
 namespace ProductAPI.Controllers
 {
@@ -45,8 +46,16 @@ namespace ProductAPI.Controllers
         }
 
         [HttpPost]
-        public object Post(Product product)
+        public ActionResult<Product> Post(CreateProductDTO product)
         {
+            Product result = new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = product.Name,
+                Price = product.Price,
+                CreatedTime = DateTime.Now,
+            };
+
             conn.Connection.Open();
 
             try
@@ -54,10 +63,10 @@ namespace ProductAPI.Controllers
                 string sql = @"INSERT INTO products (Id, Name, Price, CreatedTime) VALUES (@Id, @Name, @Price, @CreatedTime);";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id", product.Id);
-                    cmd.Parameters.AddWithValue("@Name", product.Name);
-                    cmd.Parameters.AddWithValue("@Price", product.Price);
-                    cmd.Parameters.AddWithValue("@CreatedTime", product.CreatedTime);
+                    cmd.Parameters.AddWithValue("@Id", result.Id);
+                    cmd.Parameters.AddWithValue("@Name", result.Name);
+                    cmd.Parameters.AddWithValue("@Price", result.Price);
+                    cmd.Parameters.AddWithValue("@CreatedTime", result.CreatedTime);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -75,8 +84,16 @@ namespace ProductAPI.Controllers
         }
 
         [HttpPut]
-        public object Put(Product product)
+        public ActionResult<Product> Put(UpdateDTO product)
         {
+            Product result = new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                CreatedTime = DateTime.Now,
+            };
+
             conn.Connection.Open();
 
             try
@@ -84,10 +101,10 @@ namespace ProductAPI.Controllers
                 string sql = @"UPDATE products SET Name = @Name, Price = @Price, CreatedTime = @CreatedTime WHERE Id = @Id;";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id", product.Id);
-                    cmd.Parameters.AddWithValue("@Name", product.Name);
-                    cmd.Parameters.AddWithValue("@Price", product.Price);
-                    cmd.Parameters.AddWithValue("@CreatedTime", product.CreatedTime);
+                    cmd.Parameters.AddWithValue("@Id", result.Id);
+                    cmd.Parameters.AddWithValue("@Name", result.Name);
+                    cmd.Parameters.AddWithValue("@Price", result.Price);
+                    cmd.Parameters.AddWithValue("@CreatedTime", result.CreatedTime.ToString("yyyy-MM-dd hh:mm:ss"));
 
                     cmd.ExecuteNonQuery();
                 }
